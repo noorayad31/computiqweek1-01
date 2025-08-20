@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Advice</title>
+<style>
+ 
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(-45deg, #74ebd5, #9face6, #fbc2eb, #a6c1ee);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  
+  .card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 600px;
+    color: #000;
+    animation: floatCard 6s ease-in-out infinite;
+    transition: all 0.3s ease;
+  }
+
+  @keyframes floatCard {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: #000;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #000;
+    font-weight: bold;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+
+  button:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+
+  button:active {
+    transform: scale(0.98) translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  p {
+    margin-top: 25px;
+    font-size: 20px;
+    font-style: italic;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    color: #000;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.5s forwards;
+  }
+
+
+  p:empty {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: none;
+  }
+
+  p:not(:empty) {
+    animation: fadeIn 0.5s forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Do you need advice?</h1>
+  <button id="btn">Give me advice</button>
+  <p id="advice"></p>
+</div>
+
+<script>
+  const adviceContainer = document.getElementById("advice");
+  const btn = document.getElementById("btn");
+
+  const url = "https://api.adviceslip.com/advice";
+
+  let getAdvice = () => {
+      adviceContainer.classList.remove("show");
+      fetch(url)
+      .then((data) => data.json())
+      .then((item) => {
+          adviceContainer.textContent = item.slip.advice;
+          console.log(item.slip.advice);
+      })
+      .catch((error) => {
+          adviceContainer.textContent = "Oops! Couldn't fetch advice.";
+          console.error(error);
+      });
+  }
+
+  btn.addEventListener("click", getAdvice);
+  getAdvice();
+</script>
+
+</body>
+</html>
